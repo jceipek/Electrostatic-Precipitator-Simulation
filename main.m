@@ -1,8 +1,7 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Plates
-plateWidth = 0.5;
-plateHeight = 0.5;
-plateSeparation = 0.25;
+plateWidth = 1;
+plateHeight = 1;
+plateSeparation = 0.5;
 duration = 1;
 chargeDistribution = 1;
 plateConfig = PlateConfiguration(plateWidth,...
@@ -11,33 +10,19 @@ plateConfig = PlateConfiguration(plateWidth,...
                                  chargeDistribution);
 
 %Particle
-position = [-.1,-plateWidth,0];
+position = [-.1,-plateWidth/2,0];
 velocity = [0,0.1,0];
 particle = DustParticle(position,velocity);
 
 %NonDimensionalizer
 nD = NonDimensionalizer(particle,plateConfig);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%                        Plot Plates                            %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-x = ones(1,5)*plateSeparation;
-y = [-plateWidth,plateWidth,plateWidth,-plateWidth,-plateWidth];
-z = [plateHeight,plateHeight,-plateHeight,-plateHeight,plateHeight];
-plot3(x,y,z,'r');
+plateConfig.plotPlates();
 
-hold on
 
-x = ones(1,5)*-plateSeparation;
-y = [-plateWidth,plateWidth,plateWidth,-plateWidth,-plateWidth];
-z = [plateHeight,plateHeight,-plateHeight,-plateHeight,plateHeight];
-plot3(x,y,z,'r');
-axis equal
-
-xlabel('X');ylabel('Y');zlabel('Z')
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%Simulate and time a single particle
 tic
-ndChargedParticleSim(particle,plateConfig,nD,duration)
+[T,W] = ndChargedParticleSim(particle,plateConfig,nD,duration,10^(-1));
 toc
+
+plot3(W(:,1),W(:,2),W(:,3));
