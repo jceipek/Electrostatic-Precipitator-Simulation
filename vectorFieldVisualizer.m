@@ -7,8 +7,8 @@ function vectorFieldVisualizer(plateConfig,nD,res,varargin)
         tol = varargin{1};
     elseif ~isempty(varargin)
         %Incorrect # of args specified
-        error(strcat('ndChargedParticleSim(particle,plateConfig,nD,duration,[tol])',...
-                 ' takes 2 or 3 arguments.'));
+        error(strcat('vectorFieldVisualizer(plateConfig,nD,res,[tol])',...
+                 ' takes 3 or 4 arguments.'));
     end
 
     
@@ -20,7 +20,7 @@ function vectorFieldVisualizer(plateConfig,nD,res,varargin)
     plateHeightRadius = nD.ndPos(plateConfig.plateHeight/2);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    
+    %Generate 3D Vector Field
     x = linspace(-plateSeparationRadius+0.01,plateSeparationRadius-0.01,res);
     y = linspace(-plateWidthRadius+0.01,plateWidthRadius-0.01,res);
     z = linspace(-plateHeightRadius+0.01,plateHeightRadius-0.01,res);
@@ -40,6 +40,7 @@ function vectorFieldVisualizer(plateConfig,nD,res,varargin)
         end
     end
     
+    %%Dimensionalize%%
     x = nD.dPos(x);
     y = nD.dPos(y);
     z = nD.dPos(z);
@@ -47,8 +48,10 @@ function vectorFieldVisualizer(plateConfig,nD,res,varargin)
     u = nD.dPos(u);
     v = nD.dPos(v);
     w = nD.dPos(w);
+    %%%%%%%%%%%%%%%%%%
     
- quiver3(x,y,z,u,v,w);
+    %Plot 3D Vector Field
+    quiver3(x,y,z,u,v,w);
 
     function eVec = plateFieldAtPt(rVec)
         %eVec = plateFieldAtPt(rVec)
