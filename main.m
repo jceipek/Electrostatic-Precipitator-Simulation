@@ -25,4 +25,9 @@ tic
 [T,W] = ndChargedParticleSim(particle,plateConfig,nD,duration,10^(-1));
 toc
 
-plot3(W(:,1),W(:,2),W(:,3));
+
+
+%plot3(W(:,1),W(:,2),W(:,3));
+
+hold on;
+vectorFieldVisualizer(plateConfig,nD,3,10^(-2));
