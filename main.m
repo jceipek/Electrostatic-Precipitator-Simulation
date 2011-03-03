@@ -30,4 +30,4 @@ toc
 %plot3(W(:,1),W(:,2),W(:,3));
 
 hold on;
-vectorFieldVisualizer(plateConfig,nD,3,10^(-2));
+vectorFieldVisualizer(plateConfig,nD,8,10^(-2));
