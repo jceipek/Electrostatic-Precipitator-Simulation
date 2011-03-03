@@ -22,6 +22,14 @@ function [T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duratio
     particlePosition = nD.ndPos(particle.position);
     particleVelocity = nD.ndVel(particle.velocity);
     duration = nD.ndTime(duration);
+    
+    ndWireCollection = wireConfig.wireCollection;
+    for i = 1:length(ndWireCollection)
+        currWire = ndWireCollection{i};
+        currwire.startPos = nD.ndPos(currWire.startPos);
+        currwire.endPos = nD.ndPos(currWire.endPos);
+    end
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     %Perform the simulation
@@ -44,7 +52,7 @@ function [T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duratio
         dRdt = vVec;
         
         %Direction depends on charge
-        dVdt = sign(particle.charge)*plateFieldAtPt(rVec);
+        dVdt = sign(particle.charge)*fieldAtPt(rVec);
         
         delta = [dRdt; dVdt'];
     end
@@ -62,17 +70,26 @@ function [T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duratio
         direction = [-1;1]; %Decreasing, increasing
     end
 
-    function eVec = plateFieldAtPt(rVec)
+    function eVec = fieldAtPt(rVec)
         %eVec = plateFieldAtPt(rVec)
         %   Compute the electric field experienced at a point rVec
-        %   due to the two plates.
+        %   due to the two plates and several wires.
      
-        eVec = dblquadv(@evalIntegral,-plateWidthRadius,plateWidthRadius,...
+        eVecPlate = dblquadv(@evalIntegralPlate,-plateWidthRadius,plateWidthRadius,...
                                       -plateHeightRadius,plateHeightRadius,...
                                       tol);
+        eVec = eVecPlate;
+
+        for i = 1:length(ndWireCollection)
+            currWire = ndWireCollection{i};
+            eVecWire = quadv(@(t)evalIntegralWires(t,currWire.startPos,...
+                                                   currWire.endPos),0,1);
+            eVecWire = currWire.charge * eVecWire;
+            eVec = eVec + eVecWire;
+        end
         
-        function eVecPartial = evalIntegral(y,z)
-            %eVecPartial = evalIntegral(y,z)
+        function eVecPartialPlate = evalIntegralPlate(y,z)
+            %eVecPartialPlate = evalIntegralPlate(y,z)
             %   Core of the simulation: find the field at rVec due to y,z
             %   By superposition, this can be integrated with dblquadv
             
@@ -84,10 +101,24 @@ function [T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duratio
             eVecPartial2 = chargeDistribution*(rVec - srcVec2)...
                            ./((norm(rVec - srcVec2))^3);
             
-            eVecPartial = eVecPartial1 + eVecPartial2;
+            eVecPartialPlate = eVecPartial1 + eVecPartial2;
   
         end
-        
+       
+           function eVecPartialWires = evalIntegralWires(t,startPos,endPos)
+            %eVecPartialWires = evalIntegralWires(t,startPos,endPos)
+            %   Core of the simulation: find the field at rVec due to wires
+            %   By superposition, this can be integrated with quadv
+            
+            srcVec1 = [startPos(1) + (endPos(1) - startPos(1))*t,...
+                       startPos(2) + (endPos(2) - startPos(2))*t,...
+                       startPos(3) + (endPos(3) - startPos(3))*t];
+            
+            eVecPartialWires = (rVec - srcVec1)...
+                           ./((norm(rVec - srcVec1))^3);
+       
+  
+        end
     end
 
 end

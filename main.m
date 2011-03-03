@@ -8,10 +8,13 @@ plateConfig = PlateConfiguration(plateWidth,...
                                  plateHeight,...
                                  plateSeparation,...
                                  chargeDistribution);
+                             
+wire1 = Wire(-1, [0,0,-0.5], [0,0,0.5]);
+wireConfig = WireConfiguration(wire1);
 
 %Particle
-position = [-.1,-plateWidth/2,0];
-velocity = [0,0.1,0];
+position = [0,-plateWidth/2,0];
+velocity = [0,5,0];
 particle = DustParticle(position,velocity);
 
 %NonDimensionalizer
@@ -24,13 +27,9 @@ plateConfig.plotPlates();
 tic
 [T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,10^(-1));
 toc
-W(end,1:3)
-
-
 
 plot3(W(:,1),W(:,2),W(:,3));
 
-<<<<<<< HEAD
 hold on;
-vectorFieldVisualizer(plateConfig,nD,8,10^(-2));
->>>>>>> 40ecac3479d0311165542215e9cf3d32e04177fd
+% vectorFieldVisualizer(plateConfig,nD,8,10^(-2));
+
