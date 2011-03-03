@@ -37,7 +37,7 @@ classdef DustParticle
                              ' constructor can take 2 or 4 arguments'));
             end
         end
-
+        
         function obj = kill(obj)
             %kill()
             %   Call when a particle is collected  
