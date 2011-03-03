@@ -19,5 +19,10 @@ classdef Wire
            obj.endPos = endPos;
         end
         
+        function plotWire(obj)
+           plot3([obj.startPos(1),obj.endPos(1)],...
+                 [obj.startPos(2),obj.endPos(2)],...
+                 [obj.startPos(3),obj.endPos(3)],'r'); 
+        end
     end
 end

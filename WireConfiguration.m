@@ -16,12 +16,10 @@ classdef WireConfiguration
             obj.wireCollection = varargin;
         end
         
-        function obj = addWire(obj,wire)
-            %addWire(obj,wire)
-            %   Add a new wire to the collection
-            
-            obj = [obj.wireCollection {wire}];
+        function plotWires(obj)
+            for i = 1:length(obj.wireCollection)
+                obj.wireCollection{i}.plotWire;
+            end
         end
-        
     end
 end
