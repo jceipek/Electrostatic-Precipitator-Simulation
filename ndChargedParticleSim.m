@@ -1,4 +1,4 @@
-function [T,W] = ndChargedParticleSim(particle,plateConfig,nD,duration,varargin)
+function [T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,varargin)
     %ndChargedParticleSim(particle,plateConfig,nD,duration,[tol])
     %   Simulate a particle moving in plates defined by 'plateConfig'
 
@@ -34,7 +34,7 @@ function [T,W] = ndChargedParticleSim(particle,plateConfig,nD,duration,varargin)
     W(:,4:6) = nD.dVel(W(:,4:6));
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
-    function delta=simulate(t,W)
+    function delta=simulate(~,W)
         %delta=simulate(t,W)
         %   ODE-compatible simulator for a particle
         
@@ -49,7 +49,7 @@ function [T,W] = ndChargedParticleSim(particle,plateConfig,nD,duration,varargin)
         delta = [dRdt; dVdt'];
     end
 
-    function [distToWall,isterminal,direction] = collected(t,W)
+    function [distToWall,isterminal,direction] = collected(~,W)
         %[distToWall,isterminal,direction] = collected(t,W)
         %   Termination event fuction used to see if particles are
         %   collected because they hit the plates.

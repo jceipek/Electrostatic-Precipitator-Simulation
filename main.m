@@ -22,12 +22,13 @@ plateConfig.plotPlates();
 
 %Simulate and time a single particle
 tic
-[T,W] = ndChargedParticleSim(particle,plateConfig,nD,duration,10^(-1));
+[T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,10^(-1));
 toc
+W(end,1:3)
 
 
 
-%plot3(W(:,1),W(:,2),W(:,3));
+plot3(W(:,1),W(:,2),W(:,3));
 
-hold on;
-vectorFieldVisualizer(plateConfig,nD,3,10^(-2));
+%hold on;
+%vectorFieldVisualizer(plateConfig,nD,3,10^(-2));
