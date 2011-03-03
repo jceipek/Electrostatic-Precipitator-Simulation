@@ -1,4 +1,4 @@
-function vectorFieldVisualizer(plateConfig,nD,res,varargin)
+function vectorFieldVisualizer(plateConfig,wireConfig,nD,res,varargin)
     %vectorFieldVisualizer(plateConfig,nD,varargin)
     %   plot a vector field for the ESP
 
@@ -18,6 +18,14 @@ function vectorFieldVisualizer(plateConfig,nD,res,varargin)
     plateSeparationRadius = nD.ndPos(plateConfig.plateSeparation/2);
     plateWidthRadius = nD.ndPos(plateConfig.plateWidth/2);
     plateHeightRadius = nD.ndPos(plateConfig.plateHeight/2);
+    
+    ndWireCollection = wireConfig.wireCollection;
+    for i = 1:length(ndWireCollection)
+        currWire = ndWireCollection{i};
+        currwire.startPos = nD.ndPos(currWire.startPos);
+        currwire.endPos = nD.ndPos(currWire.endPos);
+    end
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     %Generate 3D Vector Field
@@ -32,7 +40,10 @@ function vectorFieldVisualizer(plateConfig,nD,res,varargin)
     for i = 1:res
         for j = 1:res
             for k = 1:res
-                vec = plateFieldAtPt([x(i,j,k),y(i,j,k),z(i,j,k)]);
+                rVec = [x(i,j,k),y(i,j,k),z(i,j,k)];
+                vec = fieldAtPt(rVec,ndWireCollection,chargeDistribution,...
+                          plateWidthRadius,plateHeightRadius,...
+                          plateSeparationRadius,tol);
                 u(i,j,k) = vec(1);
                 v(i,j,k) = vec(2);
                 w(i,j,k) = vec(3);
@@ -53,32 +64,6 @@ function vectorFieldVisualizer(plateConfig,nD,res,varargin)
     %Plot 3D Vector Field
     quiver3(x,y,z,u,v,w);
 
-    function eVec = plateFieldAtPt(rVec)
-        %eVec = plateFieldAtPt(rVec)
-        %   Compute the electric field experienced at a point rVec
-        %   due to the two plates.
-     
-        eVec = dblquadv(@evalIntegral,-plateWidthRadius,plateWidthRadius,...
-                                      -plateHeightRadius,plateHeightRadius,...
-                                      tol);
-        
-        function eVecPartial = evalIntegral(y,z)
-            %eVecPartial = evalIntegral(y,z)
-            %   Core of the simulation: find the field at rVec due to y,z
-            %   By superposition, this can be integrated with dblquadv
-            
-            srcVec1 = [-plateSeparationRadius,y,z];
-            srcVec2 = [plateSeparationRadius,y,z];
-            
-            eVecPartial1 = chargeDistribution*(rVec - srcVec1)...
-                           ./((norm(rVec - srcVec1))^3);
-            eVecPartial2 = chargeDistribution*(rVec - srcVec2)...
-                           ./((norm(rVec - srcVec2))^3);
-            
-            eVecPartial = eVecPartial1 + eVecPartial2;
-  
-        end
-        
-    end
+   
 
 end
