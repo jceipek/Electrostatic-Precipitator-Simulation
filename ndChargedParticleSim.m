@@ -1,7 +1,7 @@
-function [T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,varargin)
+function [T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,varargin)
     %ndChargedParticleSim(particle,plateConfig,nD,duration,[tol])
     %   Simulate a particle moving in plates defined by 'plateConfig'
-
+    
     %Handle variable argument count
     if length(varargin) == 1
         tol = varargin{1};
@@ -9,6 +9,8 @@ function [T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duratio
         %Incorrect # of args specified
         error(strcat('ndChargedParticleSim(particle,plateConfig,nD,duration,[tol])',...
                  ' takes 4 or 5 arguments.'));
+    else
+        tol = 10^-6; %Default value for tol
     end
 
     
@@ -37,11 +39,21 @@ function [T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duratio
        [particlePosition,particleVelocity],...
         odeset('Events', @collected,'AbsTol',tol));
 
+    %Kill particle if collected
+    if collected(0,W(end,1:3)) <= tol
+        particle = particle.kill();
+    end
+    
     %%%%%% Re-dimensionalize %%%%%%
     W(:,1:3) = nD.dPos(W(:,1:3));
     W(:,4:6) = nD.dVel(W(:,4:6));
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 
+    
+    %%%%%%Update Particle Pos and vel:%%%%%%
+    particle.position = W(end,1:3);
+    particle.velocity = W(end,4:6);
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     function delta=simulate(~,W)
         %delta=simulate(t,W)
         %   ODE-compatible simulator for a particle

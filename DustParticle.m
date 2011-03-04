@@ -41,8 +41,17 @@ classdef DustParticle
         function obj = kill(obj)
             %kill()
             %   Call when a particle is collected  
+            
             obj.velocity = [0,0,0];
             obj.isAlive = 0;
+        end
+        
+        function plotParticleState(obj)
+            if obj.isAlive
+                plot3(obj.position(1),obj.position(2),obj.position(3),'bo');
+            else
+                plot3(obj.position(1),obj.position(2),obj.position(3),'ko');
+            end
         end
         
     end

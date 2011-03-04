@@ -27,12 +27,15 @@ hold on;
 wireConfig.plotWires();
 
 %Simulate and time a single particle
+particle.plotParticleState();
+hold on;
 tic
-[T,W] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,10^(-1));
+[T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,10^(-1));
 toc
+particle.plotParticleState();
 
 plot3(W(:,1),W(:,2),W(:,3));
 
-hold on;
+%hold on;
 vectorFieldVisualizer(plateConfig,wireConfig,nD,8,10^(-2));
 
