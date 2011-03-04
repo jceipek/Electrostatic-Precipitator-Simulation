@@ -25,7 +25,7 @@ classdef NonDimensionalizer
         function ndPos = ndPos(obj,pos)
             %ndPos = ndPos(pos)
             %   Non-dimensionalizes a position
-            
+        	
             ndPos = pos/obj.r0;
         end 
         function pos = dPos(obj,ndPos)
