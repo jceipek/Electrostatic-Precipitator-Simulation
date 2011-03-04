@@ -37,5 +37,5 @@ particle.plotParticleState();
 plot3(W(:,1),W(:,2),W(:,3));
 
 %hold on;
-vectorFieldVisualizer(plateConfig,wireConfig,nD,8,10^(-2));
+% vectorFieldVisualizer(plateConfig,wireConfig,nD,8,10^(-2));
 

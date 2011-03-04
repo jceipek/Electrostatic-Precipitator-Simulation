@@ -34,6 +34,14 @@ function [T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,n
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%     if particle.charge == 0
+%         [T,W] = ode45(@simulate, [0, duration], ...
+%                       [particlePosition,particleVelocity],...
+%                       odeset('Events', @enteredCorona,'AbsTol',tol));
+%         particlePosition = W(end,1:3);
+%         particleVelocity = W(end,4:6);
+%     end
+    
     %Perform the simulation
     [T,W] = ode45(@simulate, [0, duration], ...
        [particlePosition,particleVelocity],...
@@ -83,6 +91,27 @@ function [T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,n
         
         isterminal = [1;1]; %terminate in both cases
         direction = [-1;1]; %Decreasing, increasing
+        length(W)
     end
+
+   function [closenessToDischarge,isterminal,direction] = enteredCorona(~,W)
+        %[closenessToDischarge,isterminal,direction] = enteredCorona(~,W)
+        %   Termination event fuction used to see if  uncharged particles
+        %   pass within the corona
+       
+        %Two conditions: pass left or right plate
+        
+        rVec = W(1:3);
+        dischargeFieldStrength = -3*10^6; % V/m
+        
+        closenessToDischarge = fieldAtPt(rVec,ndWireCollection,chargeDistribution,...
+                              plateWidthRadius,plateHeightRadius,...
+                              plateSeparationRadius,tol); 
+                              
+        closenessToDischarge = dischargeFieldStrength - closenessToDischarge;
+        
+        isterminal = 1; %terminate
+        direction = -1; %Decreasing
+  end
 
 end
