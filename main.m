@@ -17,10 +17,7 @@ wireConfig = WireConfiguration(wire1,wire2);
 %Particle
 position = [0.1,-plateWidth/2,0];
 velocity = [0,5,0];
-particle = DustParticle(position,velocity);
-
-%NonDimensionalizer
-nD = NonDimensionalizer(particle,plateConfig);
+particle = DustParticle(position,velocity,0);
 
 plateConfig.plotPlates();
 hold on;
@@ -30,7 +27,7 @@ wireConfig.plotWires();
 particle.plotParticleState();
 hold on;
 tic
-[T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,10^(-6));
+[T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration,10^(-1));
 toc
 particle.plotParticleState();
 

@@ -6,8 +6,6 @@ classdef DustParticle
     properties
         %Standard defaults
         isAlive = 1;
-        %charge = -1.60217646*10^(-19); %C %Charge on an electron
-        charge = 0;
         
         %Must be set on a per-particle basis
         position;
@@ -16,12 +14,15 @@ classdef DustParticle
         %May be set on a per-particle basis
         radius = 0.001;    %m
         mass = 7.53^(-10); %kg
+        charge = -1.60217646*10^(-19); %C %Charge on an electron
+        %charge = 0;
+        
     end
     
     methods
         %Constructor Method
         function obj = DustParticle(position,velocity,varargin)
-            %DustParticle(position,velocity,[radius,mass])
+            %DustParticle(position,velocity,[charge,[radius,[mass]]])
             %   Creates a dust particle at vector 'position', moving with a
             %   vector 'velocity'
             
@@ -29,14 +30,23 @@ classdef DustParticle
             obj.position = position;
             
             %Optional parameter configuration
-            if length(varargin) == 2
-                obj.radius = varargin{1};
-                obj.mass = varargin{2};
-            elseif ~isempty(varargin)
-                %Incorrect # of args specified
-                error(strcat('DustParticle(position,velocity,[radius,mass])',...
-                             ' constructor can take 2 or 4 arguments'));
+            switch length(varargin)
+                case 0
+                    
+                case 1
+                    obj.charge = varargin{1};
+                case 2
+                    obj.charge = varargin{1};
+                    obj.radius = varargin{2};
+                case 3
+                    obj.charge = varargin{1};
+                    obj.radius = varargin{2};
+                    obj.mass = varargin{3};
+                otherwise
+                    error(strcat('DustParticle(position,velocity,[charge,[radius,[mass]]])',...
+                        ' constructor can take 2 - 5 arguments'));
             end
+
         end
         
         function obj = kill(obj)
