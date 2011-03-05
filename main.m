@@ -27,7 +27,7 @@ wireConfig.plotWires();
 particle.plotParticleState();
 hold on;
 tic
-[T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration,10^(-1));
+[T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration,10^(-1),1);
 toc
 particle.plotParticleState();
 

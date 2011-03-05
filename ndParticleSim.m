@@ -1,18 +1,23 @@
 function [T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration,varargin)
-    %[T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration,tol)
+    %[T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration,[tol,[doPlot]])
     %   Simulate a dust particle moving in plates defined by 'plateConfig'
     %   Uses ndNonChargedParticleSim and ndChargedParticleSim as
     %   appropriate.
         
     %Handle variable argument count
-    if length(varargin) == 1
-        tol = varargin{1};
-    elseif ~isempty(varargin)
-        %Incorrect # of args specified
-        error(strcat('ndChargedParticleSim(particle,plateConfig,nD,duration,[tol])',...
-                 ' takes 4 or 5 arguments.'));
-    else
-        tol = 10^-6; %Default value for tol
+    switch length(varargin)
+        case 0
+            tol = 10^-6;
+            doPlot = 0;
+        case 1
+            tol = varargin{1};
+            doPlot = 0;
+        case 2
+            tol = varargin{1};
+            doPlot = varargin{2};
+        otherwise
+            error(strcat('ndParticleSim(particle,plateConfig,wireConfig,duration,[tol,[doPlot]])',...
+                     ' takes 4 - 6 arguments.'));
     end
     
     %Initialize Path Variables
@@ -26,6 +31,9 @@ function [T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration
         nD = NonDimensionalizer(particle,plateConfig);
         %Simulation
         [T1,W1,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,tol);
+        if doPlot
+           plot3(W1(end,1),W1(end,2),W1(end,3),'ro');
+        end
     end
     
     %Charged particle
