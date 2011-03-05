@@ -30,7 +30,7 @@ wireConfig.plotWires();
 particle.plotParticleState();
 hold on;
 tic
-[T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,10^(-1));
+[T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,10^(-6));
 toc
 particle.plotParticleState();
 

@@ -1,6 +1,7 @@
 function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,varargin)
     %ndNonChargedParticleSim(particle,plateConfig,nD,duration,[tol])
-    %   Simulate a noncharged particle moving in plates defined by 'plateConfig'
+    %   Simulate a noncharged particle moving between plates defined by 
+    %   'plateConfig'
     
     %Handle variable argument count
     if length(varargin) == 1
@@ -37,10 +38,13 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
     %Perform the simulation
     [T,W] = ode45(@simulate, [0, duration], ...
        [particlePosition,particleVelocity],...
-        odeset('Events', @collected,'AbsTol',tol));
-
+        odeset('Events', @terminationEvents,'AbsTol',tol));
+    
+    %Assign charge to particle if necessary
+    if enteredCorona(0,W(end,1:3)') <= tol
+        particle = particle.assignCharge();
     %Kill particle if collected
-    if collected(0,W(end,1:3)) <= tol
+    elseif collected(0,W(end,1:3)) <= tol
         particle = particle.kill();
     end
     
@@ -58,36 +62,56 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
         %delta=simulate(t,W)
         %   ODE-compatible simulator for a particle
         
-        rVec = W(1:3)';
         vVec = W(4:6);
-
         dRdt = vVec;
+
+        %Acceleration is always 0
+        dVdt = [0,0,0];
+        delta = [dRdt; dVdt'];
+    end
+
+    function [values,isterminal,direction] = terminationEvents(~,W)
+        [distToWall,isterminal1,direction1] = collected(0,W);
+        [closenessToDischarge,isterminal2,direction2] = enteredCorona(0,W);
         
-        %Direction depends on charge
-        dVdt = sign(particle.charge)*...
-               fieldAtPt(rVec,ndWireCollection,chargeDistribution,...
-                              plateWidthRadius,plateHeightRadius,...
-                              plateSeparationRadius,tol);
-           function [closenessToDischarge,isterminal,direction] = enteredCorona(~,W)
+        values = [closenessToDischarge;distToWall];
+        
+        isterminal = [isterminal1;isterminal2]; %terminate
+        direction = [direction1;direction2];
+    end
+
+	function [closenessToDischarge,isterminal,direction] = enteredCorona(~,W)
         %[closenessToDischarge,isterminal,direction] = enteredCorona(~,W)
         %   Termination event fuction used to see if  uncharged particles
         %   pass within the corona
-       
-        %Two conditions: pass left or right plate
         
         rVec = W(1:3)';
         dischargeFieldStrength = -3*10^6; % V/m
         
-        closenessToDischarge = fieldAtPt(rVec,ndWireCollection,chargeDistribution,...
+        fieldStr = fieldAtPt(rVec,ndWireCollection,chargeDistribution,...
                               plateWidthRadius,plateHeightRadius,...
-                              plateSeparationRadius,tol); 
-                              
-        closenessToDischarge = dischargeFieldStrength - closenessToDischarge;
+                              plateSeparationRadius,tol);
+                    
+        norm(fieldStr)
+        dischargeFieldStrength
+        
+        closenessToDischarge = dischargeFieldStrength - norm(fieldStr);
         
         isterminal = 1; %terminate
         direction = -1; %Decreasing
-  end
+    end
 
-        delta = [dRdt; dVdt'];
- end
+    function [distToWall,isterminal,direction] = collected(~,W)
+        %[distToWall,isterminal,direction] = collected(t,W)
+        %   Termination event fuction used to see if particles are
+        %   collected because they hit the plates.
+        
+        %Two conditions: pass left or right plate
+        distToWall = [plateSeparationRadius - W(1);...
+                    -plateSeparationRadius - W(1)]; 
+        
+        isterminal = [1;1]; %terminate in both cases
+        direction = [-1;1]; %Decreasing, increasing
+    end
+
 end

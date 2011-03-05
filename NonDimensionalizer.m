@@ -18,13 +18,14 @@ classdef NonDimensionalizer
             e0 = 8.854187817*10^(-12); %F/m
             obj.r0 = plateConfig.lengthFactor;
             
-            chargeFactor = abs(particle.charge);
-            if chargeFactor==0
-               chargeFactor = 1;
+            if abs(particle.charge) == 0
+                obj.t0 = 1;
+                obj.r0 = 1;
+            else
+                obj.t0 = (obj.r0^3*4*pi*e0*particle.mass/...
+                         abs(particle.charge)*...
+                         plateConfig.chargeDistribution)^(1/2);
             end
-            obj.t0 = (obj.r0^3*4*pi*e0*particle.mass/...
-                     chargeFactor*...
-                     plateConfig.chargeDistribution)^(1/2);
         end
         
         function ndPos = ndPos(obj,pos)
