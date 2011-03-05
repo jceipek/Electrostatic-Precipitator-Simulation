@@ -6,8 +6,8 @@ classdef DustParticle
     properties
         %Standard defaults
         isAlive = 1;
-%         charge = -1.60217646*10^(-19); %C %Charge on an electron
-        charge = 0;
+        charge = -1.60217646*10^(-19); %C %Charge on an electron
+%         charge = 0;
         
         %Must be set on a per-particle basis
         position;

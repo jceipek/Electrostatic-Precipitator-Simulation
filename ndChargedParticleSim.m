@@ -91,7 +91,6 @@ function [T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,n
         
         isterminal = [1;1]; %terminate in both cases
         direction = [-1;1]; %Decreasing, increasing
-        length(W)
     end
 
    function [closenessToDischarge,isterminal,direction] = enteredCorona(~,W)
