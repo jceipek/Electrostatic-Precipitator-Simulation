@@ -72,18 +72,18 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
         %[closenessToDischarge,isterminal,direction] = enteredCorona(~,W)
         %   Termination event fuction used to see if  uncharged particles
         %   pass within the corona
-        
+        e0 = -8.854187817*10^(-12); %F/m
         rVec = W(1:3)';
-        dischargeFieldStrength = -3*10^6; % V/m
+        dischargeFieldStrength = -3*10^6*4*pi*e0; % V/m
         
         fieldStr = fieldAtPt(rVec,ndWireCollection,chargeDistribution,...
                               plateWidthRadius,plateHeightRadius,...
                               plateSeparationRadius,tol);
                     
-        norm(fieldStr)
-        dischargeFieldStrength
+        norm(fieldStr);
+        dischargeFieldStrength;
         
-        closenessToDischarge = dischargeFieldStrength - norm(fieldStr);
+        closenessToDischarge = dischargeFieldStrength - norm(fieldStr)
         
         isterminal = 1; %terminate
         direction = -1; %Decreasing
