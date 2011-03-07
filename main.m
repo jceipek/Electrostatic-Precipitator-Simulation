@@ -14,24 +14,34 @@ wire1 = Wire(-chargeDistribution/wireCount, [0,0,-0.5], [0,0,0.5]);
 wire2 = Wire(-chargeDistribution/wireCount, [0,0.2,-0.5], [0,0.2,0.5]);
 wireConfig = WireConfiguration(wire1,wire2);
 
-%Particle
-position = [0.1,-plateWidth/2,0];
-velocity = [0,5,0];
-particle = DustParticle(position,velocity,0);
+%Particles
+particleCount = 5;
+particles = generateParticlesForBombard(plateConfig,particleCount);
+
+%position = [0.1,-plateWidth/2,0];
+%velocity = [0,5,0];
+%particle = DustParticle(position,velocity,0);
 
 plateConfig.plotPlates();
 hold on;
 wireConfig.plotWires();
 
-%Simulate and time a single particle
-particle.plotParticleState();
-hold on;
-tic
-[T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration,10^(-1),1);
-toc
-particle.plotParticleState();
 
-plot3(W(:,1),W(:,2),W(:,3));
+%Simulate and time a single particle
+for particlei = 1:particleCount
+
+    particles{particlei}.plotParticleState();
+    hold on;
+    tic
+    [T,W,particles{particlei}] = ndParticleSim(particles{particlei}...
+                                ,plateConfig,wireConfig,duration,...
+                                10^(-1),1);
+    toc
+    particles{particlei}.plotParticleState();
+
+    plot3(W(:,1),W(:,2),W(:,3));
+
+end
 
 %hold on;
 % vectorFieldVisualizer(plateConfig,wireConfig,nD,8,10^(-2));

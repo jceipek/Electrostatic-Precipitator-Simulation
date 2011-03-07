@@ -80,10 +80,10 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
                               plateWidthRadius,plateHeightRadius,...
                               plateSeparationRadius,tol);
                     
-        norm(fieldStr);
-        dischargeFieldStrength;
+        %norm(fieldStr);
+        %dischargeFieldStrength;
         
-        closenessToDischarge = dischargeFieldStrength - norm(fieldStr)
+        closenessToDischarge = dischargeFieldStrength - norm(fieldStr);
         
         isterminal = 1; %terminate
         direction = -1; %Decreasing
