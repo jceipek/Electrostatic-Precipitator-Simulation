@@ -1,4 +1,4 @@
-function vectorFieldVisualizer(plateConfig,wireConfig,nD,res,varargin)
+function vectorFieldVisualizer(plateConfig,wireConfig,res,varargin)
     %vectorFieldVisualizer(plateConfig,nD,varargin)
     %   plot a vector field for the ESP
 
@@ -11,7 +11,9 @@ function vectorFieldVisualizer(plateConfig,wireConfig,nD,res,varargin)
                  ' takes 3 or 4 arguments.'));
     end
 
-    
+    %NonDimensionalizer
+    nD = NonDimensionalizer(plateConfig);
+        
     chargeDistribution = plateConfig.chargeDistribution;
     
     %%%%%%%%%%%%%%%%%%% Non-dimensionalize %%%%%%%%%%%%%%%%%%%
@@ -62,8 +64,10 @@ function vectorFieldVisualizer(plateConfig,wireConfig,nD,res,varargin)
     %%%%%%%%%%%%%%%%%%
     
     %Plot 3D Vector Field
-    quiver3(x,y,z,u,v,w);
-
+    %quiver3(x,y,z,u,v,w);
+    
+    streamslice(x(:,:,floor(res/2)),y(:,:,floor(res/2)),u(:,:,floor(res/2)),v(:,:,floor(res/2)))
+    
    
 
 end

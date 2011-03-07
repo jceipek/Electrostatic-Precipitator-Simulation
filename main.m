@@ -45,5 +45,5 @@ wireConfig.plotWires();
 % end
 
 %hold on;
- vectorFieldVisualizer(plateConfig,wireConfig,nD,8,10^(-2));
+ vectorFieldVisualizer(plateConfig,wireConfig,8,10^(-2));
 

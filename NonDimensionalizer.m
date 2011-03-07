@@ -11,12 +11,25 @@ classdef NonDimensionalizer
     
     methods
         %Constructor Method
-        function obj = NonDimensionalizer(particle,plateConfig)
-            %NonDimensionalizer(particle,plateConfig)
+        function obj = NonDimensionalizer(plateConfig,varargin)
+            %NonDimensionalizer(plateConfig,[particle])
             %   Constructs a Non-dimensionalizer
             
             e0 = 8.854187817*10^(-12); %F/m
             obj.r0 = plateConfig.lengthFactor;
+            
+            switch length(varargin)
+                case 0
+                    obj.r0 = plateConfig.lengthFactor;
+                    obj.t0 = (obj.r0^3*4*pi*e0/...
+                              plateConfig.chargeDistribution)^(1/2);
+                    return
+                case 1
+                    particle = varargin{1};
+                otherwise
+                    error(strcat('NonDimensionalizer(plateConfig,[particle])',...
+                        ' constructor can take 1 - 2 arguments'));
+            end
             
             if abs(particle.charge) == 0
                 obj.t0 = 1;
