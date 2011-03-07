@@ -32,16 +32,16 @@ function [T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,n
     W(:,4:6) = nD.dVel(W(:,4:6));
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
+    collected(0,W(end,1:3))
+    %Kill particle if collected
+    if sum(abs(collected(0,W(end,1:3))) <= tol) == 1
+        particle = particle.kill();
+    end
+    
     %%%%%%Update Particle Pos and vel:%%%%%%
     particle.position = W(end,1:3);
     particle.velocity = W(end,4:6);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    %Kill particle if collected
-    abs(collected(0,W(end,1:3)))
-    if abs(collected(0,W(end,1:3))) <= 0.01
-        particle = particle.kill();
-    end
     
     function delta=simulate(~,W)
         %delta=simulate(t,W)

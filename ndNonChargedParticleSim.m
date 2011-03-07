@@ -40,16 +40,16 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
     W(:,1:3) = nD.dPos(W(:,1:3));
     W(:,4:6) = nD.dVel(W(:,4:6));
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    %Kill particle if collected
+    if sum(abs(collected(0,W(end,1:3))) <= tol) == 1
+        particle = particle.kill();
+    end
     
     %%%%%%Update Particle Pos and vel:%%%%%%
     particle.position = W(end,1:3);
     particle.velocity = W(end,4:6);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    %Kill particle if collected
-    if abs(collected(0,W(end,1:3))) <= 0.01
-        particle = particle.kill();
-    end
     
     function delta=simulate(~,W)
         %delta=simulate(t,W)
