@@ -43,9 +43,10 @@ function [T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration
         %Simulation
         [T2,W2,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,nD,duration,tol);
     end
-    
+        
     T = vertcat(T1,T2);
     W = vertcat(W1,W2);
+    
 end
 
     

@@ -25,13 +25,8 @@ function [T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,n
     %Perform the simulation
     [T,W] = ode45(@simulate, [0, duration], ...
        [particlePosition,particleVelocity],...
-        odeset('Events', @collected,'AbsTol',tol));
+        odeset('Events', @terminationEvents,'AbsTol',tol));
 
-    %Kill particle if collected
-    if collected(0,W(end,1:3)) <= tol
-        particle = particle.kill();
-    end
-    
     %%%%%% Re-dimensionalize %%%%%%
     W(:,1:3) = nD.dPos(W(:,1:3));
     W(:,4:6) = nD.dVel(W(:,4:6));
@@ -41,6 +36,12 @@ function [T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,n
     particle.position = W(end,1:3);
     particle.velocity = W(end,4:6);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    %Kill particle if collected
+    abs(collected(0,W(end,1:3)))
+    if abs(collected(0,W(end,1:3))) <= 0.01
+        particle = particle.kill();
+    end
     
     function delta=simulate(~,W)
         %delta=simulate(t,W)
@@ -60,6 +61,17 @@ function [T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,n
         delta = [dRdt; dVdt'];
     end
 
+
+    function [values,isterminal,direction] = terminationEvents(~,W)
+        [distToWall,isterminal1,direction1] = collected(0,W);
+        [distToEnd,isterminal2,direction2] = notCollected(0,W);
+        
+        values = [distToWall;distToEnd];
+        
+        isterminal = [isterminal1;isterminal2]; %terminate
+        direction = [direction1;direction2];
+    end
+
     function [distToWall,isterminal,direction] = collected(~,W)
         %[distToWall,isterminal,direction] = collected(t,W)
         %   Termination event fuction used to see if particles are
@@ -72,4 +84,16 @@ function [T,W,particle] = ndChargedParticleSim(particle,plateConfig,wireConfig,n
         isterminal = [1;1]; %terminate in both cases
         direction = [-1;1]; %Decreasing, increasing
     end
+
+    function [distToEnd,isterminal,direction] = notCollected(~,W)
+         %[distToWall,isterminal,direction] = collected(t,W)
+        %   Termination event fuction used to see if particles are
+        %   collected because they hit the plates.
+        
+        %Two conditions: pass left or right plate
+        distToEnd = plateWidthRadius - W(2); 
+        
+        isterminal = 1; %terminate in both cases
+        direction = -1; %Decreasing, increasing
+    end        
 end

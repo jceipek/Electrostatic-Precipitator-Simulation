@@ -46,6 +46,11 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
     particle.velocity = W(end,4:6);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
+    %Kill particle if collected
+    if abs(collected(0,W(end,1:3))) <= 0.01
+        particle = particle.kill();
+    end
+    
     function delta=simulate(~,W)
         %delta=simulate(t,W)
         %   ODE-compatible simulator for a particle
@@ -61,11 +66,12 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
     function [values,isterminal,direction] = terminationEvents(~,W)
         [distToWall,isterminal1,direction1] = collected(0,W);
         [closenessToDischarge,isterminal2,direction2] = enteredCorona(0,W);
+        [distToEnd,isterminal3,direction3] = notCollected(0,W);
         
-        values = [closenessToDischarge;distToWall];
+        values = [closenessToDischarge;distToWall;distToEnd];
         
-        isterminal = [isterminal1;isterminal2]; %terminate
-        direction = [direction1;direction2];
+        isterminal = [isterminal1;isterminal2;isterminal3]; %terminate
+        direction = [direction1;direction2;direction3];
     end
 
 	function [closenessToDischarge,isterminal,direction] = enteredCorona(~,W)
@@ -102,4 +108,15 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
         direction = [-1;1]; %Decreasing, increasing
     end
 
+    function [distToEnd,isterminal,direction] = notCollected(~,W)
+         %[distToWall,isterminal,direction] = collected(t,W)
+        %   Termination event fuction used to see if particles are
+        %   collected because they hit the plates.
+        
+        %Two conditions: pass left or right plate
+        distToEnd = plateWidthRadius - W(2); 
+        
+        isterminal = 1; %terminate in both cases
+        direction = -1; %Decreasing, increasing
+    end          
 end
