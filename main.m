@@ -28,21 +28,22 @@ wireConfig.plotWires();
 
 
 %Simulate and time a single particle
-for particlei = 1:particleCount
-
-    particles{particlei}.plotParticleState();
-    hold on;
-    tic
-    [T,W,particles{particlei}] = ndParticleSim(particles{particlei}...
-                                ,plateConfig,wireConfig,duration,...
-                                10^(-2),1);
-    toc
-    particles{particlei}.plotParticleState();
-
-    plot3(W(:,1),W(:,2),W(:,3));
-
-end
+% 
+% for particlei = 1:particleCount
+% 
+%     particles{particlei}.plotParticleState();
+%     hold on;
+%     tic
+%     [T,W,particles{particlei}] = ndParticleSim(particles{particlei}...
+%                                 ,plateConfig,wireConfig,duration,...
+%                                 10^(-2),1);
+%     toc
+%     particles{particlei}.plotParticleState();
+% 
+%     plot3(W(:,1),W(:,2),W(:,3));
+% 
+% end
 
 %hold on;
-% vectorFieldVisualizer(plateConfig,wireConfig,nD,8,10^(-2));
+ vectorFieldVisualizer(plateConfig,wireConfig,nD,8,10^(-2));
 
