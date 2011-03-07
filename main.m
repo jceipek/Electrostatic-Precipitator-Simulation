@@ -15,7 +15,7 @@ wire2 = Wire(-chargeDistribution/wireCount, [0,0.2,-0.5], [0,0.2,0.5]);
 wireConfig = WireConfiguration(wire1,wire2);
 
 %Particles
-particleCount = 5;
+particleCount = 20;
 particles = generateParticlesForBombard(plateConfig,particleCount);
 
 %position = [0.1,-plateWidth/2,0];
@@ -35,7 +35,7 @@ for particlei = 1:particleCount
     tic
     [T,W,particles{particlei}] = ndParticleSim(particles{particlei}...
                                 ,plateConfig,wireConfig,duration,...
-                                10^(-1),1);
+                                10^(-2),1);
     toc
     particles{particlei}.plotParticleState();
 
