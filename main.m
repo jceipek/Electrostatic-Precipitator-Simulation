@@ -13,10 +13,10 @@ plateConfig = PlateConfiguration(plateWidth,...
                                  chargeDistribution);
              
 wireCount = 2;
-wire1 = Wire(-chargeDistribution/wireCount, [0,-0.2,-0.5], [0,-0.2,0.5]);
+wire1 = Wire(-chargeDistribution/wireCount, [0,0,-0.5], [0,0,0.5]);
 wire2 = Wire(-chargeDistribution/wireCount, [0,0.2,-0.5], [0,0.2,0.5]);
-%wireConfig = WireConfiguration(wire1,wire2);
-wireConfig = WireConfiguration();
+wireConfig = WireConfiguration(wire1,wire2);
+% wireConfig = WireConfiguration();
 
 %Particles
 particleCount = 20;
@@ -33,23 +33,24 @@ wireConfig.plotWires();
 
 %Simulate and time a single particle
 
-% for particlei = 1:particleCount
-% 
-%     particles{particlei}.plotParticleState();
-%     hold on;
-%     tic
-%     [T,W,particles{particlei}] = ndParticleSim(particles{particlei}...
-%                                 ,plateConfig,wireConfig,duration,...
-%                                 tolerance,1);
-%     toc
-%     particles{particlei}.plotParticleState();
-% 
-%     plot3(W(:,1),W(:,2),W(:,3));
-% 
-% end
+for particlei = 1:particleCount
+
+    particles{particlei}.plotParticleState();
+    hold on;
+    tic
+    [T,W,particles{particlei}] = ndParticleSim(particles{particlei}...
+                                ,plateConfig,wireConfig,duration,...
+                                tolerance,1);
+    toc
+    particles{particlei}.plotParticleState();
+
+    plot3(W(:,1),W(:,2),W(:,3));
+
+end
 
 %hold on;
 
-%vectorFieldVisualizer(plateConfig,wireConfig,10,tolerance,'vField');
 
-potentialVisualizer(plateConfig,wireConfig,10,tolerance,'contour');
+% vectorFieldVisualizer(plateConfig,wireConfig,8,tolerance,'vField');
+
+% potentialVisualizer(plateConfig,wireConfig,20,tolerance,'contourf');

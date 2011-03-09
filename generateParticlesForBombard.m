@@ -4,7 +4,7 @@ function particles = generateParticlesForBombard(plateConfig,particleCount)
     
     particles = cell(1,particleCount);
     for i = 1:particleCount
-        x = rand() * (plateConfig.plateSeparation/2);
+        x = rand() * (plateConfig.plateSeparation/2-0.001);
         if randi(2) == 1
             x = x*-1;
         end

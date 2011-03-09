@@ -12,7 +12,6 @@ function potentialVisualizer(plateConfig,wireConfig,res,varargin)
             plotType = 'vField';
         case 2
             tol = varargin{1};
-            plotType = varargin{2};
         otherwise
             error(strcat('vectorFieldVisualizer(plateConfig,nD,res,[tol])',...
                      ' takes 3 - 5 arguments.'));
@@ -23,7 +22,8 @@ function potentialVisualizer(plateConfig,wireConfig,res,varargin)
         
     chargeDistribution = plateConfig.chargeDistribution;
     
-    %%%%%%%%%%%%%%%%%%% Non-dimensionalize %%%%%%%%%%%%%%%%%%%
+
+            plotType = varargin{2};    %%%%%%%%%%%%%%%%%%% Non-dimensionalize %%%%%%%%%%%%%%%%%%%
     plateSeparationRadius = nD.ndPos(plateConfig.plateSeparation/2);
     plateWidthRadius = nD.ndPos(plateConfig.plateWidth/2);
     plateHeightRadius = nD.ndPos(plateConfig.plateHeight/2);
@@ -38,8 +38,8 @@ function potentialVisualizer(plateConfig,wireConfig,res,varargin)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     %Generate 3D Vector Field
-    x = linspace(-plateSeparationRadius+0.01,plateSeparationRadius-0.01,res);
-    y = linspace(-plateWidthRadius+0.01,plateWidthRadius-0.01,res);
+    x = linspace(-plateSeparationRadius+0.001,plateSeparationRadius-0.001,res);
+    y = linspace(-plateWidthRadius+0.001,plateWidthRadius-0.001,res);
     %z = linspace(-plateHeightRadius+0.01,plateHeightRadius-0.01,res);
     %[x,y,z] = meshgrid(x,y,z);
     [x,y] = meshgrid(x,y);
@@ -74,7 +74,9 @@ function potentialVisualizer(plateConfig,wireConfig,res,varargin)
     %%%%%%%%%%%%%%%%%%
     
     %Plot 3D Vector Field
-    contour(x,y,v);
+    contourf(x,y,v,20);
+%     pcolor(x,y,v);
+%     shading interp
     colorbar;
 
 end
