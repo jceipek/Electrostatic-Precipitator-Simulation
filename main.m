@@ -19,13 +19,14 @@ wireConfig = WireConfiguration(wire1,wire2);
 % wireConfig = WireConfiguration();
 
 %Particles
-particleCount = 50;
+particleCount = 20;
 collected = 0;
 undecided = 0;
 notCollected = 0;
 totalTime = 0;
 timeElapsed = 0;
-particles = generateParticlesForBombard(plateConfig,particleCount);
+particles = generateParticlesForBombard(plateConfig,particleCount,0);
+
 
 %position = [0.1,-plateWidth/2,0];
 %velocity = [0,5,0];
@@ -37,6 +38,7 @@ wireConfig.plotWires();
 
 %Simulate all of the particles
 for particlei = 1:particleCount
+
     %Simulate and time a single particle
     particles{particlei}.plotParticleState();
     hold on;
