@@ -13,9 +13,10 @@ plateConfig = PlateConfiguration(plateWidth,...
                                  chargeDistribution);
              
 wireCount = 2;
-wire1 = Wire(-chargeDistribution/wireCount, [0,0,-0.5], [0,0,0.5]);
+wire1 = Wire(-chargeDistribution/wireCount, [0,-0.2,-0.5], [0,-0.2,0.5]);
 wire2 = Wire(-chargeDistribution/wireCount, [0,0.2,-0.5], [0,0.2,0.5]);
-wireConfig = WireConfiguration(wire1,wire2);
+%wireConfig = WireConfiguration(wire1,wire2);
+wireConfig = WireConfiguration();
 
 %Particles
 particleCount = 20;
