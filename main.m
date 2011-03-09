@@ -28,7 +28,7 @@ wireConfig.plotWires();
 
 
 %Simulate and time a single particle
-% 
+
 % for particlei = 1:particleCount
 % 
 %     particles{particlei}.plotParticleState();
@@ -45,5 +45,6 @@ wireConfig.plotWires();
 % end
 
 %hold on;
- vectorFieldVisualizer(plateConfig,wireConfig,8,10^(-2));
+
+ vectorFieldVisualizer(plateConfig,wireConfig,10,10^(-2));
 

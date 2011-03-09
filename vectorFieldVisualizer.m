@@ -52,7 +52,7 @@ function vectorFieldVisualizer(plateConfig,wireConfig,res,varargin)
             end
         end
     end
-    
+
     %%Dimensionalize%%
     x = nD.dPos(x);
     y = nD.dPos(y);
@@ -67,7 +67,11 @@ function vectorFieldVisualizer(plateConfig,wireConfig,res,varargin)
     %quiver3(x,y,z,u,v,w);
     
     streamslice(x(:,:,floor(res/2)),y(:,:,floor(res/2)),u(:,:,floor(res/2)),v(:,:,floor(res/2)))
+    %streamslice(x,y,z,u,v,w);
     
+    %contourf(x,y,w,50);
+    %colorbar;
+   
    
 
 end
