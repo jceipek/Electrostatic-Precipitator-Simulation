@@ -6,6 +6,7 @@ classdef DustParticle
     properties
         %Standard defaults
         isAlive = 1;
+        wasCollected = -1; %0 -1 means undecided, rest is boolean
         
         %Must be set on a per-particle basis
         position;

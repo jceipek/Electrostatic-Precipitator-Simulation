@@ -1,5 +1,5 @@
 %General
-tolerance = 10^(-2);
+tolerance = 10^(-3);
 
 %Plates
 plateWidth = 1;

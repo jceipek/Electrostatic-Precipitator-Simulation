@@ -26,7 +26,9 @@ function [T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration
     %------------------------%
     
     %Non-Charged particle
-    if abs(particle.charge) == 0 && particle.isAlive
+    if abs(particle.charge) == 0 &&...
+                particle.isAlive &&...
+                particle.wasCollected == -1
         %NonDimensionalizer
         nD = NonDimensionalizer(plateConfig,particle);
         %Simulation
@@ -37,7 +39,9 @@ function [T,W,particle] = ndParticleSim(particle,plateConfig,wireConfig,duration
     end
     
     %Charged particle
-    if abs(particle.charge) > 0 && particle.isAlive
+    if abs(particle.charge) > 0 &&...
+               particle.isAlive &&...
+               particle.wasCollected == -1
         %NonDimensionalizer
         nD = NonDimensionalizer(plateConfig,particle);
         %Simulation

@@ -36,15 +36,23 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
         particle = particle.kill();
     end
     
+    %Kill particle if collected
+    if sum(abs(collected(0,W(end,1:6))) <= 0.0001) == 1
+        disp('COLLECTED WHEN NOT CHARGED!');
+        particle.wasCollected = 1;
+        particle = particle.kill();
+    end
+    
+    %Survive particle if not collected
+    if sum(abs(notCollected(0,W(end,1:6))) <= 0.0001) == 1
+        disp('SURVIVED WHEN NOT CHARGED!');
+        particle.wasCollected = 0;
+    end
+    
     %%%%%% Re-dimensionalize %%%%%%
     W(:,1:3) = nD.dPos(W(:,1:3));
     W(:,4:6) = nD.dVel(W(:,4:6));
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    %Kill particle if collected
-    if sum(abs(collected(0,W(end,1:3))) <= tol) == 1
-        particle = particle.kill();
-    end
     
     %%%%%%Update Particle Pos and vel:%%%%%%
     particle.position = W(end,1:3);
@@ -101,8 +109,8 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
         %   collected because they hit the plates.
         
         %Two conditions: pass left or right plate
-        distToWall = [plateSeparationRadius - W(1);...
-                    -plateSeparationRadius - W(1)]; 
+        distToWall = [plateSeparationRadius - W(1)*1.01;...
+                    -plateSeparationRadius - W(1)*1.01]; 
         
         isterminal = [1;1]; %terminate in both cases
         direction = [-1;1]; %Decreasing, increasing
@@ -114,7 +122,7 @@ function [T,W,particle] = ndNonChargedParticleSim(particle,plateConfig,wireConfi
         %   collected because they hit the plates.
         
         %Two conditions: pass left or right plate
-        distToEnd = plateWidthRadius - W(2); 
+        distToEnd = plateWidthRadius - W(2)*1.01; 
         
         isterminal = 1; %terminate in both cases
         direction = -1; %Decreasing, increasing

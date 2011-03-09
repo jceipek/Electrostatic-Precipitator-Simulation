@@ -6,15 +6,11 @@ function potentialVisualizer(plateConfig,wireConfig,res,varargin)
     switch length(varargin)
         case 0
             tol = 10^-6;
-            plotType = 'vField';
         case 1
             tol = varargin{1};
-            plotType = 'vField';
-        case 2
-            tol = varargin{1};
         otherwise
-            error(strcat('vectorFieldVisualizer(plateConfig,nD,res,[tol])',...
-                     ' takes 3 - 5 arguments.'));
+            error(strcat('potentialVisualizer(plateConfig,nD,res,[tol])',...
+                     ' takes 3 or 4 arguments.'));
     end
 
     %NonDimensionalizer
@@ -23,7 +19,7 @@ function potentialVisualizer(plateConfig,wireConfig,res,varargin)
     chargeDistribution = plateConfig.chargeDistribution;
     
 
-            plotType = varargin{2};    %%%%%%%%%%%%%%%%%%% Non-dimensionalize %%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%% Non-dimensionalize %%%%%%%%%%%%%%%%%%%
     plateSeparationRadius = nD.ndPos(plateConfig.plateSeparation/2);
     plateWidthRadius = nD.ndPos(plateConfig.plateWidth/2);
     plateHeightRadius = nD.ndPos(plateConfig.plateHeight/2);
@@ -38,28 +34,18 @@ function potentialVisualizer(plateConfig,wireConfig,res,varargin)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     %Generate 3D Vector Field
-    x = linspace(-plateSeparationRadius+0.001,plateSeparationRadius-0.001,res);
-    y = linspace(-plateWidthRadius+0.001,plateWidthRadius-0.001,res);
-    %z = linspace(-plateHeightRadius+0.01,plateHeightRadius-0.01,res);
-    %[x,y,z] = meshgrid(x,y,z);
+    x = linspace(-plateSeparationRadius*0.9,plateSeparationRadius*0.9,res);
+    y = linspace(-plateWidthRadius*0.9,plateWidthRadius*0.9,res);
     [x,y] = meshgrid(x,y);
-    %u = zeros(res,res); %,res);
-    v = zeros(res,res); %,res);
-    %w = zeros(res,res); %,res);
+    v = zeros(res,res);
     
     for i = 1:res
         for j = 1:res
-            %for k = 1:res
-                %rVec = [x(i,j,k),y(i,j,k),z(i,j,k)];
-                rVec = [x(i,j),y(i,j),0];
-                pot = ndPotentialAtPt(rVec,ndWireCollection,chargeDistribution,...
-                          plateWidthRadius,plateHeightRadius,...
-                          plateSeparationRadius,tol);
-                v(i,j) = pot;
-                %u(i,j,k) = vec(1);
-                %v(i,j,k) = vec(2);
-                %w(i,j,k) = vec(3);
-            %end
+            rVec = [x(i,j),y(i,j),0];
+            pot = ndPotentialAtPt(rVec,ndWireCollection,chargeDistribution,...
+                      plateWidthRadius,plateHeightRadius,...
+                      plateSeparationRadius,tol);
+            v(i,j) = pot;
         end
     end
 
@@ -73,7 +59,7 @@ function potentialVisualizer(plateConfig,wireConfig,res,varargin)
     %w = nD.dPos(w);
     %%%%%%%%%%%%%%%%%%
     
-    %Plot 3D Vector Field
+    %Plot Center Contour
     contourf(x,y,v,20);
 %     pcolor(x,y,v);
 %     shading interp

@@ -4,12 +4,12 @@ function particles = generateParticlesForBombard(plateConfig,particleCount)
     
     particles = cell(1,particleCount);
     for i = 1:particleCount
-        x = rand() * (plateConfig.plateSeparation/2-0.001);
+        x = rand() * (plateConfig.plateSeparation/2*0.99);
         if randi(2) == 1
             x = x*-1;
         end
             
-        z = rand() * (plateConfig.plateHeight/2);
+        z = rand() * (plateConfig.plateHeight/2*0.99);
         if randi(2) == 1
             z = z*-1;
         end
