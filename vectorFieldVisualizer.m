@@ -1,14 +1,21 @@
 function vectorFieldVisualizer(plateConfig,wireConfig,res,varargin)
     %vectorFieldVisualizer(plateConfig,nD,varargin)
-    %   plot a vector field for the ESP
-
+    %   plot a vector field/field lines for the ESP
+    
     %Handle variable argument count
-    if length(varargin) == 1
-        tol = varargin{1};
-    elseif ~isempty(varargin)
-        %Incorrect # of args specified
-        error(strcat('vectorFieldVisualizer(plateConfig,nD,res,[tol])',...
-                 ' takes 3 or 4 arguments.'));
+    switch length(varargin)
+        case 0
+            tol = 10^-6;
+            plotType = 'vField';
+        case 1
+            tol = varargin{1};
+            plotType = 'vField';
+        case 2
+            tol = varargin{1};
+            plotType = varargin{2};
+        otherwise
+            error(strcat('vectorFieldVisualizer(plateConfig,nD,res,[tol])',...
+                     ' takes 3 - 5 arguments.'));
     end
 
     %NonDimensionalizer
@@ -43,7 +50,7 @@ function vectorFieldVisualizer(plateConfig,wireConfig,res,varargin)
         for j = 1:res
             for k = 1:res
                 rVec = [x(i,j,k),y(i,j,k),z(i,j,k)];
-                vec = fieldAtPt(rVec,ndWireCollection,chargeDistribution,...
+                vec = ndFieldAtPt(rVec,ndWireCollection,chargeDistribution,...
                           plateWidthRadius,plateHeightRadius,...
                           plateSeparationRadius,tol);
                 u(i,j,k) = vec(1);
@@ -64,14 +71,11 @@ function vectorFieldVisualizer(plateConfig,wireConfig,res,varargin)
     %%%%%%%%%%%%%%%%%%
     
     %Plot 3D Vector Field
-    %quiver3(x,y,z,u,v,w);
-    
-    streamslice(x(:,:,floor(res/2)),y(:,:,floor(res/2)),u(:,:,floor(res/2)),v(:,:,floor(res/2)))
-    %streamslice(x,y,z,u,v,w);
-    
-    %contourf(x,y,w,50);
-    %colorbar;
-   
-   
+    if strcmp(plotType,'vField')
+        quiver3(x,y,z,u,v,w);
+    else
+        streamslice(x(:,:,floor(res/2)),y(:,:,floor(res/2)),...
+                    u(:,:,floor(res/2)),v(:,:,floor(res/2)))
+    end
 
 end

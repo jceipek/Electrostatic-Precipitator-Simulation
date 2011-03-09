@@ -1,7 +1,7 @@
-function eVec = fieldAtPt(rVec,ndWireCollection,chargeDistribution,...
+function eVec = ndFieldAtPt(rVec,ndWireCollection,chargeDistribution,...
                           plateWidthRadius,plateHeightRadius,...
                           plateSeparationRadius,tol)
-    %eVec = fieldAtPt(rVec,ndWireCollection,chargeDistribution,plateWidthRadius,plateHeightRadius,plateSeparationRadius,tol)
+    %eVec = ndFieldAtPt(rVec,ndWireCollection,chargeDistribution,plateWidthRadius,plateHeightRadius,plateSeparationRadius,tol)
     %   Compute the electric field experienced at a point rVec
     %   due to the two plates and several wires.
 

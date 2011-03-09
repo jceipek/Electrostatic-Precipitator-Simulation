@@ -1,3 +1,6 @@
+%General
+tolerance = 10^(-2);
+
 %Plates
 plateWidth = 1;
 plateHeight = 1;
@@ -36,7 +39,7 @@ wireConfig.plotWires();
 %     tic
 %     [T,W,particles{particlei}] = ndParticleSim(particles{particlei}...
 %                                 ,plateConfig,wireConfig,duration,...
-%                                 10^(-2),1);
+%                                 tolerance,1);
 %     toc
 %     particles{particlei}.plotParticleState();
 % 
@@ -46,5 +49,6 @@ wireConfig.plotWires();
 
 %hold on;
 
- vectorFieldVisualizer(plateConfig,wireConfig,10,10^(-2));
+%vectorFieldVisualizer(plateConfig,wireConfig,10,tolerance,'vField');
 
+potentialVisualizer(plateConfig,wireConfig,10,tolerance,'contour');

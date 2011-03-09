@@ -1,7 +1,7 @@
 function vVec = ndPotentialAtPt(rVec,ndWireCollection,chargeDistribution,...
                           plateWidthRadius,plateHeightRadius,...
                           plateSeparationRadius,tol)
-    %vVec = fieldAtPt(rVec,ndWireCollection,chargeDistribution,plateWidthRadius,plateHeightRadius,plateSeparationRadius,tol)
+    %vVec = ndPotentialAtPt(rVec,ndWireCollection,chargeDistribution,plateWidthRadius,plateHeightRadius,plateSeparationRadius,tol)
     %   Compute the potential experienced at a point rVec
     %   due to the two plates and several wires.
 
