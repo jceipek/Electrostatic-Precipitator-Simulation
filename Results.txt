@@ -1,0 +1,43 @@
+#########################################################################
+% Center Wire:
+Wire(-chargeDistribution/wireCount, [0,0,-0.5], [0,0,0.5]);
+#############RESULTS:#############
+Undecided (indicates wires deflected backwards): 0
+Not Collected: 40
+Collected: 60
+Total vs Initial Count: 100/100
+Time for Sim: 0.466013s
+Total Time: 44.728163s
+#########################################################################
+% 2 Wires on Sides, one after another
+wire1 = Wire(-chargeDistribution/wireCount, [0,-0.2,-0.5], [0,-0.2,0.5]);
+wire2 = Wire(-chargeDistribution/wireCount, [0,0.2,-0.5], [0,0.2,0.5]);
+#############RESULTS:#############
+Undecided (indicates wires deflected backwards): 0
+Not Collected: 40
+Collected: 60
+Total vs Initial Count: 100/100
+Time for Sim: 0.507624s
+Total Time: 60.299936s
+#########################################################################
+%2 Wires on Sides, side by side
+wire1 = Wire(-chargeDistribution/wireCount, [-0.1,0,-0.5], [-0.1,0,0.5]);
+wire2 = Wire(-chargeDistribution/wireCount, [0.1,0,-0.5], [0.1,0,0.5]);
+#############RESULTS:#############
+Undecided (indicates wires deflected backwards): 0
+Not Collected: 72
+Collected: 28
+Total vs Initial Count: 100/100
+Time for Sim: 0.501786s
+Total Time: 25.509856s
+#########################################################################
+%2 Wires crossing in middle
+wire1 = Wire(-chargeDistribution/wireCount, [0,0,-0.5], [0,0,0.5]);
+wire2 = Wire(-chargeDistribution/wireCount, [-0.25,0,0], [0.25,0,0]);
+#############RESULTS:#############
+Undecided (indicates wires deflected backwards): 0
+Not Collected: 56
+Collected: 44
+Total vs Initial Count: 100/100
+Time for Sim: 0.504020s
+Total Time: 37.378233s
